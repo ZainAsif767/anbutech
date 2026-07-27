@@ -25,7 +25,7 @@ export const site = {
   tagline: "An elite engineering unit that ships.",
   description:
     "AnbuTech is a software engineering unit building custom software, web & mobile apps, AI automation and cloud platforms — designed, built and shipped end to end.",
-  email: "hello@anbu-tech.com", // TODO: mailbox does not exist yet
+  email: "iamahmedismail19@gmail.com",
   // Web3Forms — free, works on a static site. Get a key at https://web3forms.com
   web3formsKey: "YOUR_WEB3FORMS_ACCESS_KEY", // TODO
   // Calendly "Book a call" link
@@ -33,9 +33,7 @@ export const site = {
   founded: "2026",
   location: "Remote · Worldwide",
   socials: [
-    { label: "LinkedIn", href: "https://linkedin.com/company/anbutech" }, // TODO
-    { label: "GitHub", href: "https://github.com/anbutech" }, // TODO
-    { label: "X", href: "https://x.com/anbutech" }, // TODO
+    { label: "LinkedIn", href: "https://www.linkedin.com/company/anbu-tech" },
   ],
 };
 
