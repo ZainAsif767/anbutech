@@ -29,7 +29,7 @@ export const site = {
   // Web3Forms — free, works on a static site. Get a key at https://web3forms.com
   web3formsKey: "YOUR_WEB3FORMS_ACCESS_KEY", // TODO
   // Calendly "Book a call" link
-  calendly: "https://calendly.com/anbutech/intro", // TODO
+  calendly: "https://calendly.com/iamahmedismail19/30min",
   founded: "2026",
   location: "Remote · Worldwide",
   socials: [
