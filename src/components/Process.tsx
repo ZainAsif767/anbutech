@@ -10,11 +10,11 @@ import {
   type MotionValue,
 } from "framer-motion";
 import { Check } from "lucide-react";
-import { process } from "@/lib/content";
+import { processSteps } from "@/lib/content";
 import SectionHeader from "./ui/SectionHeader";
 
 const clamp = (n: number) => Math.max(0, Math.min(1, n));
-const n = process.length;
+const n = processSteps.length;
 
 export default function Process() {
   const ref = useRef<HTMLOListElement>(null);
@@ -80,7 +80,7 @@ export default function Process() {
         </div>
 
         <ol ref={ref} className="relative mt-16">
-          {process.map((step, i) => (
+          {processSteps.map((step, i) => (
             <Stage
               key={step.no}
               step={step}
@@ -105,7 +105,7 @@ function Stage({
   progress,
   reduce,
 }: {
-  step: (typeof process)[number];
+  step: (typeof processSteps)[number];
   index: number;
   done: boolean;
   running: boolean;
@@ -126,7 +126,7 @@ function Stage({
       {/* spine + node */}
       <div className="relative flex flex-col items-center">
         <span
-          className="relative z-10 grid h-11 w-11 shrink-0 place-items-center rounded-full border transition-all duration-300"
+          className="relative z-10 grid h-11 w-11 shrink-0 place-items-center rounded-full border transition-[border-color,background-color,box-shadow] duration-300"
           style={{
             borderColor: active ? "var(--ember)" : "var(--line)",
             backgroundColor: done ? "var(--ember)" : "transparent",

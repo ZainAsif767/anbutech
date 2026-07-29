@@ -325,13 +325,15 @@ body {
     animation: none !important;
   }
 
-  /* Keep only the channels that aid comprehension; drop everything that travels. */
+  /* Keep only the channels that aid comprehension; drop everything that travels.
+     Durations are deliberately left alone: restricting the property list is what
+     removes movement. Forcing a duration here would *grant* a transition to every
+     element that previously had none. */
   *,
   *::before,
   *::after {
     transition-property: opacity, color, background-color, border-color,
       box-shadow, outline-color !important;
-    transition-duration: 0.2s !important;
   }
 
   .btn:hover,

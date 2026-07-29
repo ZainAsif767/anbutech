@@ -74,7 +74,7 @@ export default function AccentSwitcher({
             </button>
             {/* Revealed on focus as well as hover, so it is not pointer-only. */}
             <span
-              className={`pointer-events-none absolute left-1/2 z-50 -translate-x-1/2 scale-90 whitespace-nowrap rounded-md border border-line bg-ink-2 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-paper-dim opacity-0 shadow-lg transition-all duration-200 group-hover:scale-100 group-hover:opacity-100 group-focus-within:scale-100 group-focus-within:opacity-100 ${tipPos}`}
+              className={`pointer-events-none absolute left-1/2 z-50 -translate-x-1/2 scale-90 whitespace-nowrap rounded-md border border-line bg-ink-2 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-paper-dim opacity-0 shadow-lg transition-[opacity,scale] duration-200 group-hover:scale-100 group-hover:opacity-100 group-focus-within:scale-100 group-focus-within:opacity-100 ${tipPos}`}
             >
               {a.label}
               {isActive && <span className="ml-1 text-ember">●</span>}

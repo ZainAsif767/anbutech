@@ -26,8 +26,22 @@ export const site = {
   description:
     "AnbuTech is a software engineering unit building custom software, web & mobile apps, AI automation and cloud platforms — designed, built and shipped end to end.",
   email: "iamahmedismail19@gmail.com",
-  // Web3Forms — free, works on a static site. Get a key at https://web3forms.com
-  web3formsKey: "YOUR_WEB3FORMS_ACCESS_KEY", // TODO
+  /*
+   * Web3Forms — free, works on a static site. Get a key at https://web3forms.com
+   * by registering the inbox that should receive enquiries; the key is bound to
+   * that address, so it is what decides where the form lands.
+   *
+   * The key is public by design (it ships in the client bundle), so this is not
+   * a secret — it lives in an env var only so it can differ per environment and
+   * so the repo does not carry a live endpoint.
+   *
+   * Set NEXT_PUBLIC_WEB3FORMS_KEY in .env (or .env.local) for local builds. Both
+   * are gitignored, so deployments do NOT inherit them — set the same variable in
+   * the Vercel project settings or production ships a form that cannot deliver.
+   * `output: "export"` inlines the value at build time, so changing it requires a
+   * rebuild, not just a redeploy.
+   */
+  web3formsKey: process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? "",
   // Calendly "Book a call" link
   calendly: "https://calendly.com/iamahmedismail19/30min",
   founded: "2026",
@@ -116,7 +130,9 @@ export type Step = {
   icon: LucideIcon;
 };
 
-export const process: Step[] = [
+// Not `process` — a module-scoped const by that name shadows the Node global
+// for this entire file, which breaks any process.env read here.
+export const processSteps: Step[] = [
   {
     no: "01",
     title: "Discover",

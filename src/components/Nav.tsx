@@ -183,7 +183,7 @@ export default function Nav() {
                       </span>
                       <ArrowUpRight
                         size={22}
-                        className="ml-auto self-center text-muted transition-all group-hover:translate-x-1 group-hover:text-ember"
+                        className="ml-auto self-center text-muted transition-[translate,color] group-hover:translate-x-1 group-hover:text-ember"
                       />
                     </a>
                   </motion.li>

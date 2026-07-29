@@ -59,7 +59,7 @@ export default function Services() {
 
                 <ArrowUpRight
                   size={18}
-                  className="mt-8 text-muted opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:text-ember group-hover:opacity-100"
+                  className="mt-8 text-muted opacity-0 transition-[opacity,translate,color] duration-300 group-hover:translate-x-1 group-hover:text-ember group-hover:opacity-100"
                 />
               </Reveal>
             );

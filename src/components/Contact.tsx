@@ -1,13 +1,20 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, CalendarDays, Check, Loader2, Mail } from "lucide-react";
 import { site } from "@/lib/content";
-import { crossFade, springSheet } from "@/lib/motion";
+import { crossFade, easeOut, springSheet } from "@/lib/motion";
 import Reveal from "./ui/Reveal";
 
 type Status = "idle" | "loading" | "success" | "error";
+
+/*
+ * One message for every failure. Web3Forms returns operator-facing strings like
+ * "Invalid Access Key" — accurate for us, alarming and useless for a prospect —
+ * so the real reason goes to the console and the visitor gets a way through.
+ */
+const FAILURE_MESSAGE = "Something went wrong sending that.";
 
 export default function Contact() {
   const [status, setStatus] = useState<Status>("idle");
@@ -16,6 +23,18 @@ export default function Contact() {
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    // No key means every request is guaranteed to fail. Say so loudly in dev
+    // rather than shipping a form that silently swallows enquiries.
+    if (!site.web3formsKey) {
+      console.error(
+        "[Contact] NEXT_PUBLIC_WEB3FORMS_KEY is not set — the enquiry form cannot deliver. Set it in .env.local and rebuild."
+      );
+      setStatus("error");
+      setError(FAILURE_MESSAGE);
+      return;
+    }
+
     setStatus("loading");
     setError("");
 
@@ -35,12 +54,14 @@ export default function Contact() {
         setStatus("success");
         form.reset();
       } else {
+        console.error("[Contact] Web3Forms rejected the submission:", json);
         setStatus("error");
-        setError(json.message || "Something went wrong. Please email us instead.");
+        setError(FAILURE_MESSAGE);
       }
-    } catch {
+    } catch (err) {
+      console.error("[Contact] Network error submitting the form:", err);
       setStatus("error");
-      setError("Network error. Please email us instead.");
+      setError(FAILURE_MESSAGE);
     }
   }
 
@@ -106,10 +127,15 @@ export default function Contact() {
 
           {/* right — form */}
           <Reveal delay={0.1}>
+            {/* mode="wait" — the two states are mutually exclusive, so the form
+                must finish leaving before the panel arrives. initial={false}
+                keeps the form from animating in on first paint. */}
+            <AnimatePresence mode="wait" initial={false}>
             {status === "success" ? (
               /* Completion is a moment worth marking — and it has to reach a
                  screen reader too, not just the eye. */
               <motion.div
+                key="success"
                 role="status"
                 aria-live="polite"
                 initial={{ opacity: 0, scale: reduce ? 1 : 0.96 }}
@@ -129,7 +155,10 @@ export default function Contact() {
                 </p>
               </motion.div>
             ) : (
-              <form
+              <motion.form
+                key="form"
+                exit={{ opacity: 0, scale: reduce ? 1 : 0.98 }}
+                transition={{ duration: 0.16, ease: easeOut }}
                 onSubmit={onSubmit}
                 className="rounded-2xl border border-line bg-ink-2 p-6 md:p-8"
               >
@@ -172,8 +201,17 @@ export default function Contact() {
                 </div>
 
                 {status === "error" && (
+                  /* A dead end is not an acceptable failure state — the visitor
+                     always leaves with a working way to reach us. */
                   <p role="alert" className="mt-4 text-sm text-ember">
-                    {error}
+                    {error}{" "}
+                    <a
+                      href={`mailto:${site.email}`}
+                      className="underline underline-offset-4 transition-colors hover:text-ember-bright"
+                    >
+                      Email us instead
+                    </a>{" "}
+                    and we&apos;ll pick it up from there.
                   </p>
                 )}
 
@@ -192,8 +230,9 @@ export default function Contact() {
                     </>
                   )}
                 </button>
-              </form>
+              </motion.form>
             )}
+            </AnimatePresence>
           </Reveal>
         </div>
       </div>
