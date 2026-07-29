@@ -38,6 +38,12 @@ export const metadata: Metadata = {
     template: `%s · ${site.name}`,
   },
   description: site.description,
+  /*
+   * `trailingSlash: true` plus the apex-to-www redirect means this page is
+   * reachable at several spellings. The canonical names the one that counts and
+   * keeps the ranking signal on a single URL.
+   */
+  alternates: { canonical: "/" },
   keywords: [
     "software development",
     "custom software",
@@ -63,6 +69,26 @@ export const metadata: Metadata = {
   icons: { icon: "/icon.svg" },
 };
 
+/*
+ * Organization schema. This is what lets a search engine treat AnbuTech as an
+ * entity (name, contact, profiles) rather than as an anonymous page of text.
+ * `Organization` rather than `LocalBusiness` on purpose: the unit is remote,
+ * so there is no premises to describe.
+ */
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: site.name,
+  url: site.url,
+  description: site.description,
+  email: site.email,
+  logo: `${site.url}/icon.svg`,
+  foundingDate: site.founded,
+  slogan: site.tagline,
+  areaServed: "Worldwide",
+  sameAs: site.socials.map((s) => s.href),
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -70,6 +96,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${display.variable} ${sans.variable} ${mono.variable}`}>
         <script dangerouslySetInnerHTML={{ __html: accentScript }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
+        />
         <a href="#main" className="skip-link btn btn-primary">
           Skip to content
         </a>
