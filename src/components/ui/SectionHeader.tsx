@@ -19,7 +19,7 @@ export default function SectionHeader({
         <span className="mono-label !text-paper-dim">{kicker}</span>
       </Reveal>
       <Reveal delay={0.05}>
-        <h2 className="display mt-5 text-4xl text-paper sm:text-5xl md:text-6xl text-balance">
+        <h2 className="display display-xl mt-5 text-4xl text-paper sm:text-5xl md:text-6xl text-balance">
           {title}
         </h2>
       </Reveal>

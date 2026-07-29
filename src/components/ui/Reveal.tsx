@@ -1,16 +1,8 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
-
-const variants: Variants = {
-  hidden: { opacity: 0, y: 26 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-  },
-};
+import { crossFade, tweenReveal } from "@/lib/motion";
 
 export default function Reveal({
   children,
@@ -24,14 +16,17 @@ export default function Reveal({
   as?: "div" | "li" | "span";
 }) {
   const MotionTag = motion[as];
+  // Framer drives transforms in JS, so the CSS reduced-motion rules never see
+  // them — the preference has to be honored here or it is silently ignored.
+  const reduce = useReducedMotion();
+
   return (
     <MotionTag
       className={className}
-      variants={variants}
-      initial="hidden"
-      whileInView="show"
+      initial={{ opacity: 0, y: reduce ? 0 : 26 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ delay }}
+      transition={{ ...(reduce ? crossFade : tweenReveal), delay }}
     >
       {children}
     </MotionTag>

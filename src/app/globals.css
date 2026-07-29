@@ -54,6 +54,8 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  /* Anchored nav must land the heading below the fixed header, not under it. */
+  scroll-padding-top: 6rem;
 }
 
 body {
@@ -84,12 +86,40 @@ body {
 }
 
 /* ---- type ---- */
+/*
+ * Tracking and leading are size-specific, never one value for every size.
+ * As type grows the letters read too far apart, so tracking goes negative and
+ * leading tightens; as it shrinks both relax back toward neutral. The tier is
+ * chosen at the call site because CSS cannot read its own computed font-size.
+ */
 .display {
   font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 700;
-  line-height: 0.95;
-  letter-spacing: -0.03em;
+  font-optical-sizing: auto;
+  /* mid tier — section h3s, stat figures, ~1.5rem–2rem */
+  line-height: 1.08;
+  letter-spacing: -0.018em;
 }
+
+/* display tier — hero and section headlines, ~3rem and up */
+.display-xl {
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+}
+
+/* large tier — ~2rem–3rem */
+.display-lg {
+  line-height: 1;
+  letter-spacing: -0.026em;
+}
+
+/* small tier — card headings and the wordmark, ~1rem–1.25rem.
+   At this size tight tracking hurts legibility more than it helps rhythm. */
+.display-sm {
+  line-height: 1.3;
+  letter-spacing: -0.006em;
+}
+
 .mono-label {
   font-family: var(--font-mono), monospace;
   font-size: 0.7rem;
@@ -131,10 +161,38 @@ body {
   background: linear-gradient(180deg, var(--ink-2), var(--ink));
   border: 1px solid var(--line);
   border-radius: 1rem;
-  transition: border-color 0.4s ease, transform 0.4s ease;
+  transition: border-color 0.4s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.card:hover {
-  border-color: rgba(244, 98, 46, 0.4);
+/* Hover-only affordances must not latch on touch, where :hover sticks after a tap. */
+@media (hover: hover) {
+  .card:hover {
+    border-color: color-mix(in srgb, var(--ember) 40%, transparent);
+    transform: translateY(-3px);
+  }
+}
+
+/*
+ * Translucent chrome: a floating functional layer with content scrolling
+ * underneath, rather than an opaque strip that eats a band of the viewport.
+ * The bottom edge is a fade where content meets the bar, not a hard 1px rule.
+ */
+.chrome {
+  background: color-mix(in srgb, var(--ink) 72%, transparent);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+.chrome::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 100%;
+  height: 1.25rem;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--ink) 55%, transparent),
+    transparent
+  );
 }
 
 /* ---- decorative ---- */
@@ -170,27 +228,54 @@ body {
   font-size: 0.95rem;
   border-radius: 9999px;
   padding: 0.85rem 1.6rem;
-  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease,
+  /* Transform is the press channel and must feel instant; color can take its time. */
+  transition: transform 0.12s ease-out, background 0.25s ease, color 0.25s ease,
     border-color 0.25s ease;
   white-space: nowrap;
+  touch-action: manipulation; /* drops the ~300ms tap delay */
 }
-.btn:hover {
-  transform: translateY(-2px);
+@media (hover: hover) {
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+}
+/* Feedback lives on the press, not on the release. */
+.btn:active {
+  transform: scale(0.97);
 }
 .btn-primary {
   background: var(--ember);
   color: var(--ink);
 }
-.btn-primary:hover {
-  background: var(--ember-bright);
-}
 .btn-ghost {
   border: 1px solid var(--line);
   color: var(--paper);
 }
-.btn-ghost:hover {
+@media (hover: hover) {
+  .btn-primary:hover {
+    background: var(--ember-bright);
+  }
+  .btn-ghost:hover {
+    border-color: var(--ember);
+    color: var(--ember);
+  }
+}
+
+/* ---- focus ---- */
+/* Keyboard users need a visible, consistent indicator everywhere a pointer
+   user gets a hover state. Never remove the ring without replacing it. */
+:focus-visible {
+  outline: 2px solid var(--ember);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.btn:focus-visible {
+  outline-offset: 3px;
+  border-radius: 9999px;
+}
+.field:focus-visible {
+  outline-offset: 0;
   border-color: var(--ember);
-  color: var(--ember);
 }
 
 /* ---- keyframes ---- */
@@ -221,13 +306,76 @@ body {
   }
 }
 
+/* ------------------------------------------------------------------ */
+/*  Accessibility preferences                                         */
+/*  Reduced motion is not "no feedback" — it is gentler, non-          */
+/*  vestibular feedback. Opacity and color changes stay; travel,       */
+/*  parallax, and looping oscillation go.                              */
+/* ------------------------------------------------------------------ */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* Looping ambient motion — the vestibular offender. Nothing here is load-bearing. */
+  .animate-marquee,
+  .animate-float,
+  .animate-pulse-glow,
+  .animate-ping {
+    animation: none !important;
+  }
+
+  /* Keep only the channels that aid comprehension; drop everything that travels. */
   *,
   *::before,
   *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
+    transition-property: opacity, color, background-color, border-color,
+      box-shadow, outline-color !important;
+    transition-duration: 0.2s !important;
+  }
+
+  .btn:hover,
+  .btn:active,
+  .card:hover {
+    transform: none !important;
+  }
+  /* The loading spinner survives: it reports ongoing status, and a frozen
+     one reads as a hung request. It is small and does not fill the field of view. */
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .chrome {
+    background: var(--ink);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .chrome::after {
+    display: none;
+  }
+  .grain {
+    display: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --paper-dim: #e2ded5;
+    --muted: #b0aca3;
+    --line: rgba(244, 241, 234, 0.3);
+  }
+  .chrome {
+    background: var(--ink);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .chrome::after {
+    display: none;
+  }
+  .grain {
+    display: none;
+  }
+  .outline-text {
+    -webkit-text-stroke-color: var(--paper);
   }
 }

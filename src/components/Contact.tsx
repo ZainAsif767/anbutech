@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, CalendarDays, Check, Loader2, Mail } from "lucide-react";
 import { site } from "@/lib/content";
+import { crossFade, springSheet } from "@/lib/motion";
 import Reveal from "./ui/Reveal";
 
 type Status = "idle" | "loading" | "success" | "error";
@@ -10,6 +12,7 @@ type Status = "idle" | "loading" | "success" | "error";
 export default function Contact() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
+  const reduce = useReducedMotion();
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -65,7 +68,7 @@ export default function Contact() {
               <span className="mono-label !text-paper-dim">Contact</span>
             </Reveal>
             <Reveal delay={0.05}>
-              <h2 className="display mt-5 text-4xl text-paper sm:text-5xl md:text-6xl text-balance">
+              <h2 className="display display-xl mt-5 text-4xl text-paper sm:text-5xl md:text-6xl text-balance">
                 Let&apos;s build the thing you&apos;ve been{" "}
                 <span className="gradient-text">putting off.</span>
               </h2>
@@ -104,7 +107,16 @@ export default function Contact() {
           {/* right — form */}
           <Reveal delay={0.1}>
             {status === "success" ? (
-              <div className="flex h-full min-h-[20rem] flex-col items-center justify-center rounded-2xl border border-line bg-ink-2 p-10 text-center">
+              /* Completion is a moment worth marking — and it has to reach a
+                 screen reader too, not just the eye. */
+              <motion.div
+                role="status"
+                aria-live="polite"
+                initial={{ opacity: 0, scale: reduce ? 1 : 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={reduce ? crossFade : springSheet}
+                className="flex h-full min-h-[20rem] flex-col items-center justify-center rounded-2xl border border-line bg-ink-2 p-10 text-center"
+              >
                 <span className="grid h-14 w-14 place-items-center rounded-full bg-ember text-ink">
                   <Check size={26} />
                 </span>
@@ -115,7 +127,7 @@ export default function Contact() {
                   Thanks for reaching out — we&apos;ll be in touch within one
                   business day.
                 </p>
-              </div>
+              </motion.div>
             ) : (
               <form
                 onSubmit={onSubmit}
@@ -155,12 +167,14 @@ export default function Contact() {
                     required
                     rows={4}
                     placeholder="What are you building, and what does success look like?"
-                    className="w-full resize-none rounded-xl border border-line bg-ink px-4 py-3 text-paper placeholder:text-muted focus:border-ember focus:outline-none"
+                    className="w-full resize-none rounded-xl border border-line bg-ink px-4 py-3 text-paper transition-colors placeholder:text-muted focus:border-ember focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
                   />
                 </div>
 
                 {status === "error" && (
-                  <p className="mt-4 text-sm text-ember">{error}</p>
+                  <p role="alert" className="mt-4 text-sm text-ember">
+                    {error}
+                  </p>
                 )}
 
                 <button
@@ -210,7 +224,7 @@ function Field({
         name={name}
         required={required}
         placeholder={placeholder}
-        className="w-full rounded-xl border border-line bg-ink px-4 py-3 text-paper placeholder:text-muted focus:border-ember focus:outline-none"
+        className="w-full rounded-xl border border-line bg-ink px-4 py-3 text-paper transition-colors placeholder:text-muted focus:border-ember focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
       />
     </div>
   );

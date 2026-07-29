@@ -1,12 +1,21 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, CalendarDays } from "lucide-react";
 import { heroStats, site } from "@/lib/content";
-
-const ease = [0.22, 1, 0.36, 1] as const;
+import { crossFade, easeOut } from "@/lib/motion";
 
 export default function Hero() {
+  // Framer animates in JS, out of reach of the CSS reduced-motion rules.
+  const reduce = useReducedMotion();
+  const rise = (y: number, delay: number, duration = 0.7) => ({
+    initial: { opacity: 0, y: reduce ? 0 : y },
+    animate: { opacity: 1, y: 0 },
+    transition: reduce
+      ? { ...crossFade, delay: delay * 0.5 }
+      : { duration, ease: easeOut, delay },
+  });
+
   return (
     <section id="top" className="relative overflow-hidden pt-32 md:pt-40">
       {/* background */}
@@ -35,9 +44,7 @@ export default function Hero() {
 
       <div className="shell relative">
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease }}
+          {...rise(14, 0, 0.6)}
           className="inline-flex items-center gap-2 rounded-full border border-line bg-ink-2/60 px-4 py-1.5"
         >
           <span className="relative flex h-2 w-2">
@@ -49,33 +56,20 @@ export default function Hero() {
           </span>
         </motion.div>
 
-        <h1 className="display mt-7 text-[3.4rem] leading-[0.92] sm:text-7xl md:text-[6.5rem]">
+        <h1 className="display display-xl mt-7 text-[3.4rem] sm:text-7xl md:text-[6.5rem]">
           {["We build,", "ship, and"].map((line, i) => (
-            <motion.span
-              key={line}
-              className="block"
-              initial={{ opacity: 0, y: 28 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease, delay: 0.1 + i * 0.08 }}
-            >
+            <motion.span key={line} className="block" {...rise(28, 0.1 + i * 0.08)}>
               {line}
             </motion.span>
           ))}
-          <motion.span
-            className="block"
-            initial={{ opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease, delay: 0.26 }}
-          >
+          <motion.span className="block" {...rise(28, 0.26)}>
             <span className="gradient-text">scale</span>{" "}
             <span className="outline-text">software.</span>
           </motion.span>
         </h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease, delay: 0.4 }}
+          {...rise(18, 0.4)}
           className="mt-8 max-w-xl text-lg leading-relaxed text-paper-dim md:text-xl"
         >
           AnbuTech is an elite engineering unit. We take products from first call
@@ -84,9 +78,7 @@ export default function Hero() {
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease, delay: 0.5 }}
+          {...rise(18, 0.5)}
           className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center"
         >
           <a href="#contact" className="btn btn-primary">
@@ -104,9 +96,7 @@ export default function Hero() {
 
         {/* stat strip */}
         <motion.dl
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease, delay: 0.62 }}
+          {...rise(18, 0.62)}
           className="mt-16 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-3 md:mt-24"
         >
           {heroStats.map((s) => (

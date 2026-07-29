@@ -29,7 +29,7 @@ export default function Why() {
                 delay={(i % 2) * 0.06}
                 className="bg-ink p-7 md:p-8"
               >
-                <h3 className="display text-lg text-paper md:text-xl">
+                <h3 className="display display-sm text-lg text-paper md:text-xl">
                   {item.title}
                 </h3>
                 <p className="mt-3 text-[0.92rem] leading-relaxed text-paper-dim">

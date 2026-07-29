@@ -16,7 +16,7 @@ export default function Logo({ className = "" }: { className?: string }) {
           fill="var(--ember)"
         />
       </svg>
-      <span className="display text-[1.15rem] font-bold tracking-tight text-paper">
+      <span className="display display-sm text-[1.15rem] font-bold text-paper">
         Anbu<span className="ember-text">Tech</span>
       </span>
     </span>
