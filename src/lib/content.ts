@@ -24,7 +24,7 @@ export const site = {
   url: "https://www.anbu-tech.com",
   tagline: "An elite engineering unit that ships.",
   description:
-    "AnbuTech is a software engineering unit building custom software, web & mobile apps, AI automation and cloud platforms — designed, built and shipped end to end.",
+    "AnbuTech is a software engineering unit building custom software, web & mobile apps, AI automation and cloud platforms. Designed, built and shipped end to end.",
   email: "iamahmedismail19@gmail.com",
   /*
    * Web3Forms — free, works on a static site. Get a key at https://web3forms.com
@@ -77,7 +77,7 @@ export const services: Service[] = [
     no: "01",
     title: "Custom Software",
     blurb:
-      "Bespoke platforms engineered around your operation — not bent to fit someone else's template.",
+      "Bespoke platforms engineered around your operation, not bent to fit someone else's template.",
     points: ["Internal tools & dashboards", "SaaS products", "API & systems integration"],
     icon: Code2,
   },
@@ -109,7 +109,7 @@ export const services: Service[] = [
     no: "05",
     title: "Cloud & DevOps",
     blurb:
-      "Infrastructure that scales quietly — automated, observable and built to stay up.",
+      "Infrastructure that scales quietly: automated, observable and built to stay up.",
     points: ["AWS / GCP / Vercel", "CI/CD pipelines", "Monitoring & reliability"],
     icon: Cloud,
   },
@@ -142,7 +142,7 @@ export const processSteps: Step[] = [
   {
     no: "02",
     title: "Design",
-    body: "Architecture and interface, defined together — so what we build is what you need.",
+    body: "Architecture and interface, defined together, so what we build is what you need.",
     icon: PenTool,
   },
   {
@@ -160,7 +160,7 @@ export const processSteps: Step[] = [
   {
     no: "05",
     title: "Scale",
-    body: "We stay on to harden, optimise and grow what we built — partners, not vendors.",
+    body: "We stay on to harden, optimise and grow what we built. Partners, not vendors.",
     icon: TrendingUp,
   },
 ];
@@ -183,7 +183,7 @@ export const why = [
   },
   {
     title: "Shipped, not theorised",
-    body: "We optimise for working software in production. Momentum is the strategy — you feel progress every single week.",
+    body: "We optimise for working software in production. Momentum is the strategy, and you feel progress every single week.",
   },
   {
     title: "Built to be handed over",

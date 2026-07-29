@@ -8,15 +8,13 @@ export default function Services() {
     <section id="services" className="relative py-24 md:py-36">
       <div className="shell">
         <SectionHeader
-          index="01"
-          kicker="Services"
           title={
             <>
               Everything it takes to{" "}
               <span className="ember-text">build a product.</span>
             </>
           }
-          intro="One unit, the full stack of capability. No stitching vendors together — we cover the work end to end."
+          intro="One unit, the full stack of capability. No stitching vendors together: we cover the work end to end."
         />
 
         <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">

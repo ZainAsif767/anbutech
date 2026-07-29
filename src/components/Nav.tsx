@@ -50,6 +50,7 @@ const rowVariants = {
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [active, setActive] = useState("");
   const reduce = useReducedMotion();
 
   useEffect(() => {
@@ -57,6 +58,36 @@ export default function Nav() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  /*
+   * Which section am I in? On a single-page site the nav is the only wayfinding
+   * there is, so it has to answer that. A band roughly a third down the viewport
+   * decides the winner; ties go to the earliest section in document order, so the
+   * highlight never flickers between two sections that overlap the band.
+   */
+  useEffect(() => {
+    const ids = nav.map((item) => item.href.slice(1));
+    const sections = ids
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+    if (!sections.length) return;
+
+    const inBand = new Set<string>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) inBand.add(entry.target.id);
+          else inBand.delete(entry.target.id);
+        }
+        const current = ids.find((id) => inBand.has(id));
+        setActive(current ? `#${current}` : "");
+      },
+      { rootMargin: "-30% 0px -60% 0px" }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
   }, []);
 
   // lock body scroll + close on Escape while the overlay is open
@@ -84,15 +115,29 @@ export default function Nav() {
         </a>
 
         <div className="hidden items-center gap-8 md:flex">
-          {nav.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="text-sm text-paper-dim transition-colors hover:text-paper"
-            >
-              {item.label}
-            </a>
-          ))}
+          {nav.map((item) => {
+            const isActive = active === item.href;
+            return (
+              <a
+                key={item.href}
+                href={item.href}
+                aria-current={isActive ? "true" : undefined}
+                className={`relative text-sm transition-colors ${
+                  isActive ? "text-paper" : "text-paper-dim hover:text-paper"
+                }`}
+              >
+                {item.label}
+                {/* Marks position without shifting layout, so nothing reflows as
+                    the highlight moves between items during a scroll. */}
+                <span
+                  aria-hidden
+                  className={`absolute -bottom-1.5 left-0 h-px w-full origin-left bg-ember transition-transform duration-300 ${
+                    isActive ? "scale-x-100" : "scale-x-0"
+                  }`}
+                />
+              </a>
+            );
+          })}
         </div>
 
         <div className="hidden items-center gap-5 md:flex">
@@ -173,9 +218,14 @@ export default function Nav() {
                     <a
                       href={item.href}
                       onClick={() => setOpen(false)}
+                      aria-current={active === item.href ? "true" : undefined}
                       className="group flex items-baseline gap-4 py-5"
                     >
-                      <span className="font-mono text-xs text-muted">
+                      <span
+                        className={`font-mono text-xs ${
+                          active === item.href ? "text-ember" : "text-muted"
+                        }`}
+                      >
                         0{i + 1}
                       </span>
                       <span className="display display-lg text-4xl text-paper transition-colors group-hover:text-ember">

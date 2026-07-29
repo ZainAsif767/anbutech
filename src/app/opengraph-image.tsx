@@ -6,7 +6,7 @@ import { site } from "@/lib/content";
 // Required by `output: "export"` — prerenders the image to a file at build time.
 export const dynamic = "force-static";
 
-export const alt = `${site.name} — ${site.tagline}`;
+export const alt = `${site.name} · ${site.tagline}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -36,17 +36,8 @@ export default function OpengraphImage() {
           position: "relative",
         }}
       >
-        {/* 64px grid, echoing .grid-lines on the site */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            backgroundImage:
-              "linear-gradient(rgba(244,241,234,0.055) 1px, transparent 1px), linear-gradient(90deg, rgba(244,241,234,0.055) 1px, transparent 1px)",
-            backgroundSize: "64px 64px",
-          }}
-        />
+        {/* The tiled grid that used to sit here was dropped along with the one
+            on the site. The ember glow below carries the surface. */}
         {/* ember glow, standing in for the blurred .glow orbs */}
         <div
           style={{

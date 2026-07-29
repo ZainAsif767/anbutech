@@ -84,7 +84,6 @@ export default function Contact() {
           {/* left — pitch */}
           <div>
             <Reveal className="flex items-center gap-3">
-              <span className="mono-label">05</span>
               <span className="h-px w-10 bg-line" />
               <span className="mono-label !text-paper-dim">Contact</span>
             </Reveal>
@@ -150,7 +149,7 @@ export default function Contact() {
                   Message received.
                 </h3>
                 <p className="mt-2 max-w-xs text-paper-dim">
-                  Thanks for reaching out — we&apos;ll be in touch within one
+                  Thanks for reaching out. We&apos;ll be in touch within one
                   business day.
                 </p>
               </motion.div>

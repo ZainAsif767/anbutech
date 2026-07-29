@@ -12,15 +12,14 @@
   --paper-dim: #b8b4ab;
   --muted: #82807a;
   --line: rgba(244, 241, 234, 0.1);
-  --line-soft: rgba(244, 241, 234, 0.06);
 
+  /* One accent, three intensities. A second hue was tried as a counter-tone and
+     removed — it appeared exactly once, which read as an accident. */
   --ember: #f4622e;
   --ember-bright: #ff7a45;
   --ember-deep: #c2410c;
-  --cool: #2de2c5; /* sparing counter-tone for glows */
 
   --glow-ember: rgba(244, 98, 46, 0.32);
-  --glow-cool: rgba(45, 226, 197, 0.16);
 }
 
 @theme inline {
@@ -32,7 +31,6 @@
   --color-muted: var(--muted);
   --color-ember: var(--ember);
   --color-ember-bright: var(--ember-bright);
-  --color-cool: var(--cool);
   --color-line: var(--line);
 
   --color-background: var(--ink);
@@ -206,12 +204,6 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-.grid-lines {
-  background-image: linear-gradient(var(--line-soft) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
-  background-size: 64px 64px;
-}
-
 .glow {
   position: absolute;
   border-radius: 9999px;
@@ -259,6 +251,21 @@ body {
     border-color: var(--ember);
     color: var(--ember);
   }
+}
+
+/* ---- skip link ---- */
+/* Offscreen until focused, but never removed from the tab order — a keyboard
+   user should not have to walk the whole nav to reach the page content. */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  transform: translateY(-200%);
+  transition: transform 150ms ease-out;
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
 }
 
 /* ---- focus ---- */

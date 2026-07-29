@@ -7,8 +7,6 @@ export default function Stack() {
     <section id="stack" className="relative py-24 md:py-36">
       <div className="shell">
         <SectionHeader
-          index="03"
-          kicker="Capabilities"
           title={
             <>
               Tools we reach for{" "}

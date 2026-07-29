@@ -1,25 +1,36 @@
 import Reveal from "./Reveal";
 
+/*
+ * `kicker` is optional on purpose. An eyebrow above every section header is the
+ * templated rhythm that makes a page read as generated, so they are rationed to
+ * roughly one per three sections and the headline carries the rest.
+ *
+ * The numbered prefix ("01", "02", …) was removed outright: enumerating sections
+ * tells the reader nothing their scroll position has not already told them.
+ */
 export default function SectionHeader({
-  index,
   kicker,
   title,
   intro,
 }: {
-  index: string;
-  kicker: string;
+  kicker?: string;
   title: React.ReactNode;
   intro?: string;
 }) {
   return (
     <div className="max-w-3xl">
-      <Reveal className="flex items-center gap-3">
-        <span className="mono-label">{index}</span>
-        <span className="h-px w-10 bg-line" />
-        <span className="mono-label !text-paper-dim">{kicker}</span>
-      </Reveal>
+      {kicker && (
+        <Reveal className="flex items-center gap-3">
+          <span className="h-px w-10 bg-line" />
+          <span className="mono-label !text-paper-dim">{kicker}</span>
+        </Reveal>
+      )}
       <Reveal delay={0.05}>
-        <h2 className="display display-xl mt-5 text-4xl text-paper sm:text-5xl md:text-6xl text-balance">
+        <h2
+          className={`display display-xl text-4xl text-paper sm:text-5xl md:text-6xl text-balance ${
+            kicker ? "mt-5" : ""
+          }`}
+        >
           {title}
         </h2>
       </Reveal>

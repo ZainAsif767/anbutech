@@ -17,9 +17,21 @@ export default function Hero() {
   });
 
   return (
-    <section id="top" className="relative overflow-hidden pt-32 md:pt-40">
-      {/* background */}
-      <div className="absolute inset-0 grid-lines [mask-image:radial-gradient(ellipse_at_50%_0%,black,transparent_75%)]" />
+    <section id="top" className="relative overflow-hidden pt-24">
+      {/*
+        Background: a horizon, not a drawn field. This used to be a 64px tiled
+        hairline grid, which put a blueprint over a page that is not a blueprint.
+        A single soft wash off the top edge gives the surface depth and lets the
+        type and the ember glow carry the section.
+      */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-[34rem]"
+        style={{
+          background:
+            "radial-gradient(130% 78% at 50% -10%, var(--ink-3) 0%, transparent 62%)",
+        }}
+      />
       <div
         className="glow animate-pulse-glow"
         style={{
@@ -31,6 +43,8 @@ export default function Hero() {
           background: "var(--glow-ember)",
         }}
       />
+      {/* One accent, at two intensities — a lone teal glow on an otherwise
+          all-ember page read as a stray, not as a counter-tone. */}
       <div
         className="glow"
         style={{
@@ -38,7 +52,8 @@ export default function Hero() {
           right: "-8rem",
           width: "26rem",
           height: "26rem",
-          background: "var(--glow-cool)",
+          background: "var(--glow-ember)",
+          opacity: 0.4,
         }}
       />
 
@@ -47,10 +62,9 @@ export default function Hero() {
           {...rise(14, 0, 0.6)}
           className="inline-flex items-center gap-2 rounded-full border border-line bg-ink-2/60 px-4 py-1.5"
         >
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ember opacity-60" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-ember" />
-          </span>
+          {/* The pulsing dot was removed: it signalled "live status" next to a
+              founding year, which is not a status. Decoration pretending to be
+              state is the tell. */}
           <span className="font-mono text-xs tracking-wider text-paper-dim">
             Software engineering unit · est. {site.founded}
           </span>
@@ -72,9 +86,8 @@ export default function Hero() {
           {...rise(18, 0.4)}
           className="mt-8 max-w-xl text-lg leading-relaxed text-paper-dim md:text-xl"
         >
-          AnbuTech is an elite engineering unit. We take products from first call
-          to live — custom software, web &amp; mobile, AI automation and the cloud
-          that runs it all.
+          An elite engineering unit. We take products from first call to live:
+          custom software, web, mobile, AI and cloud.
         </motion.p>
 
         <motion.div

@@ -62,22 +62,20 @@ export default function Process() {
         }}
       />
       <div className="shell relative">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <SectionHeader
-            index="02"
-            kicker="How we operate"
-            title={
-              <>
-                A pipeline that{" "}
-                <span className="outline-text">always ships.</span>
-              </>
-            }
-            intro="No drama, no theatre — a clear path from problem to production. Scroll it like a deploy."
-          />
-          <span className="font-mono text-xs uppercase tracking-widest text-muted">
-            {done} / {n} stages
-          </span>
-        </div>
+        {/* The "N / N stages" counter that floated in the top-right of this
+            header was removed. A small paragraph pinned to the corner of a
+            section heading aligns to nothing, and the timeline below already
+            shows exactly which stages are complete. */}
+        <SectionHeader
+          kicker="How we operate"
+          title={
+            <>
+              A pipeline that{" "}
+              <span className="outline-text">always ships.</span>
+            </>
+          }
+          intro="No drama, no theatre. A clear path from problem to production, scrolled like a deploy."
+        />
 
         <ol ref={ref} className="relative mt-16">
           {processSteps.map((step, i) => (

@@ -34,8 +34,8 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — ${site.tagline}`,
-    template: `%s — ${site.name}`,
+    default: `${site.name} · ${site.tagline}`,
+    template: `%s · ${site.name}`,
   },
   description: site.description,
   keywords: [
@@ -51,13 +51,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: site.url,
-    title: `${site.name} — ${site.tagline}`,
+    title: `${site.name} · ${site.tagline}`,
     description: site.description,
     siteName: site.name,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.name} — ${site.tagline}`,
+    title: `${site.name} · ${site.tagline}`,
     description: site.description,
   },
   icons: { icon: "/icon.svg" },
@@ -70,6 +70,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${display.variable} ${sans.variable} ${mono.variable}`}>
         <script dangerouslySetInnerHTML={{ __html: accentScript }} />
+        <a href="#main" className="skip-link btn btn-primary">
+          Skip to content
+        </a>
         <div className="grain" aria-hidden />
         {children}
       </body>
